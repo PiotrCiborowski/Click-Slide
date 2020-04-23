@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="author" content="Ciborowski Piotr"/>
+        <title>Click & Slide</title>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <div id="main">
+            <input id="trzy" type="button" value="3x3" onclick="getSliced(3)"/>
+            <div id="blokadaTrzy"></div>
+            <input id="cztery" type="button" value="4x4" onclick="getSliced(4)"/>
+            <div id="blokadaCztery"></div>
+            <input id="piec" type="button" value="5x5" onclick="getSliced(5)"/>
+            <div id="blokadaPiec"></div>
+            <input id="szesc" type="button" value="6x6" onclick="getSliced(6)"/>
+            <div id="blokadaSzesc"></div>
+            <br>
+            <img id="left" src="assets/Left.png" alt="" width="64px" height="64px" style="position: absolute; top: 71px; left: 230px;"/>
+            <div id="blokadaLeft"></div>
+            <div id="imgShower">
+                <div class="imgHolder">
+                    <img src="assets/Image1.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image2.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image3.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image4.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image5.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image6.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image7.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image8.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image9.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image10.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image11.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image12.gif" alt="" width="128px" height="128px"/>
+                    <img src="assets/Image1.gif" alt="" width="128px" height="128px"/>
+                </div>
+            </div>
+            <img id="right" src="assets/Right.png" alt="" width="64px" height="64px" style="position: absolute; top: 71px; left: 442px;"/>
+            <div id="blokadaRight"></div>
+            <div id="blokadaImg"></div>
+            <div id="plansza"></div>
+            <div id="blokada"></div>
+        </div>
+        <script src="index.js"></script>
+    </body>
+</html>
