@@ -1,18 +1,25 @@
-class Game
+import { clickPiece } from './player'
+import * as globalVariables from './globalVariables'
+
+export default class Game
 {
-    boxSize: number
-    tab = []
-    tab2 = []
+    //boxSize: number
+    //tab = []
+    //tab2 = []
     liczba: number
-    temp: any
-    tempArray: any
-    text = "Image1.gif"
-    bool: boolean = false
-    randomize: number
+    //temp: any
+    //tempArray: any
+    //text = "Image1.gif"
+    //bool: boolean = false
+    //randomize: number
+    randomTemp: number
+    cx: number
+    cy: number
+    t: number
     timing: number
 
-    myTimer: number
-    victory: number
+    //myTimer: number
+    //victory: number
     picture: number = 1
     sliderPos: number = 1
     lastDirection: number
@@ -37,16 +44,16 @@ class Game
 
     deletingArrays()
     {
-        for (let y = 0; y < (this.boxSize + 2); y++)
+        for (let y = 0; y < (globalVariables.boxSize + 2); y++)
         {
-            for (let x = 0; x < (this.boxSize + 2); x++)
+            for (let x = 0; x < (globalVariables.boxSize + 2); x++)
             {
-                this.tab.splice(0, (this.boxSize + 2))
+                globalVariables.tab.splice(0, (globalVariables.boxSize + 2))
             }
         }
-        for (let i = 0; i < (this.boxSize * this.boxSize); i++)
+        for (let i = 0; i < (globalVariables.boxSize * globalVariables.boxSize); i++)
         {
-            delete this.tab2[i]
+            delete globalVariables.tab2[i]
         }
     }
 
@@ -55,32 +62,18 @@ class Game
         this.deletingArrays()
         document.getElementById("plansza").innerHTML = null
         document.getElementById("blokada").style.zIndex = "-1"
-        /*delete this.tab
-        delete this.tab2*/
-        this.victory = 0
-        this.bool = true
-        this.boxSize = n
-        this.randomize = n * n * 10
+        globalVariables.changeVictory(0)
+        globalVariables.changeBool(true)
+        globalVariables.changeBoxSize(n)
+        globalVariables.changeRandomize(n * n * 10)
         for (let y = 1; y < (n + 1); y++)
         {
             for (let x = 1; x < (n + 1); x++)
             {
-                 document.getElementById("plansza").innerHTML += '<div class="klocek" id="k' + x + y + '" style="width: ' + (600 / n) +'px; height: ' + (600 / n) + 'px;" value="' + x + ' ' + y + ' ' + n + '">'/*<img class="klocek_i" id="i' + x + y +'" src="Image1.jpg" alt="" width="600px" height="600px"/></div>'*/
-                 document.getElementById("k" + x + y).style.backgroundImage = "url('assets/" + this.text + "')"
+                 document.getElementById("plansza").innerHTML += '<div class="klocek" id="k' + x + y + '" style="width: ' + (600 / n) +'px; height: ' + (600 / n) + 'px;" value="' + x + ' ' + y + ' ' + n + '">'
+                 document.getElementById("k" + x + y).style.backgroundImage = "url('assets/" + globalVariables.text + "')"
             }
         }
-        
-        /*for (let y = 0; y < n; y++)
-        {
-            for (let x = 0; x < n; x++)
-            {
-                 let top = y * (598 / n)
-                 let right = (x + 1) * (598 / n)
-                 let bot = (y + 1) * (598 / n)
-                 let left = x * (598 / n)
-                 document.getElementById("i" + x + y).style.clip = "rect(" + top + "px, " + right + "px, " + bot + "px, " + left + "px)"
-            }
-        }*/
         
         for (let y = 1; y < (n + 1); y++)
         {
@@ -91,15 +84,13 @@ class Game
                  document.getElementById("k" + x + y).style.backgroundPosition = "-" + left + "px -" + top + "px"
             }
         }
-        
-        //this.tab = []
 
         for (let y = 0; y < (n + 2); y++)
         {
-            this.tab[y] = []
+            globalVariables.tab[y] = []
             for (let x = 0; x < (n + 2); x++)
             {
-                this.tab[y][x] = -1
+                globalVariables.tab[y][x] = -1
             }
         }
         
@@ -109,8 +100,7 @@ class Game
         {
             for (let x = 1; x < (n + 1); x++)
             {
-                this.tab[y][x] = this.liczba
-                //console.log(this.tab[y][x])
+                globalVariables.tab[y][x] = this.liczba
                 this.liczba--
             }
         }
@@ -119,17 +109,14 @@ class Game
         {
             for (let x = 1; x < (n + 1); x++)
             {
-                document.getElementById("k" + x + y).setAttribute("onclick", "clickPiece(this.getAttribute('value'))")
+                let forClicking = <HTMLInputElement>document.getElementById("k" + x + y)
+                document.getElementById("k" + x + y).addEventListener("click", (e:Event) => clickPiece(forClicking.getAttribute('value')))
             }
         }
         
         this.eraseZero(n)
         
-        /*for (; randomize > 0;)
-        {
-            randomPieces()
-        }*/
-        this.myTimer = setInterval(() => {this.randomPieces()}, 5)
+        globalVariables.changeTimer(setInterval(() => {this.randomPieces()}, 5))
     }
 
     randomPieces()
@@ -140,81 +127,67 @@ class Game
         document.getElementById("blokadaSzesc").style.zIndex = "5"
         document.getElementById("blokadaLeft").style.zIndex = "5"
         document.getElementById("blokadaRight").style.zIndex = "5"
-        //document.getElementById("blokadaImg3").style.zIndex = "5"
         
         let direction = Math.floor((Math.random() * 10) % 4)
-        //console.log("Direction: " + direction)
-        /*let clickRandomX = Math.floor((Math.random() * 10) % (boxSize - 1))
-        let clickRandomY = Math.floor((Math.random() * 10) % (boxSize - 1))
-        console.log("Ta liczba to: " + clickRandomX + " i " + clickRandomY)*/
         
         while(this.lastDirection == direction)
         {
             direction = Math.floor((Math.random() * 10) % 4)
         }
-        for (let y = 1; y < (this.boxSize + 1); y++)
+        for (let y = 1; y < (globalVariables.boxSize + 1); y++)
         {
             if(this.wasHere != 0)
             {
                 this.wasHere = 0
                 break
             }
-            for (let x = 1; x < (this.boxSize + 1); x++)
+            for (let x = 1; x < (globalVariables.boxSize + 1); x++)
             {
-                if(this.tab[y][x] == 0)
+                if(globalVariables.tab[y][x] == 0)
                 {
-                    //randomTemp = "tab[" + y + "][" + x + "]"
-                    
-                    //console.log(x + "; " + y)
-                    
                     if(direction == 0)
                     {
-                        //let swappingDirection = tab[cy][cx - 1]
-                        if(this.tab[y - 1][x] > 0)
+                        if(globalVariables.tab[y - 1][x] > 0)
                         {
                             this.lastDirection = 2
                             this.wasHere = 1
-                            this.swapPieces(x, (y - 1), this.boxSize)
+                            globalVariables.swapPieces(x, (y - 1), globalVariables.boxSize)
                             break
                         }
                     }
                     if(direction == 1)
                     {
-                        if(this.tab[y][x + 1] > 0)
+                        if(globalVariables.tab[y][x + 1] > 0)
                         {
                             this.lastDirection = 3
                             this.wasHere = 1
-                            this.swapPieces((x + 1), y, this.boxSize)
+                            globalVariables.swapPieces((x + 1), y, globalVariables.boxSize)
                             break
                         }
                     }
                     if(direction == 2)
                     {
-                        if(this.tab[y + 1][x] > 0)
+                        if(globalVariables.tab[y + 1][x] > 0)
                         {
                             this.lastDirection = 0
                             this.wasHere = 1
-                            this.swapPieces(x, (y + 1), this.boxSize)
+                            globalVariables.swapPieces(x, (y + 1), globalVariables.boxSize)
                             break
                         }
                     }
                     if(direction == 3)
                     {
-                        if(this.tab[y][x - 1] > 0)
+                        if(globalVariables.tab[y][x - 1] > 0)
                         {
                             this.lastDirection = 1
                             this.wasHere = 1
-                            this.swapPieces((x - 1), y, this.boxSize)
+                            globalVariables.swapPieces((x - 1), y, globalVariables.boxSize)
                             break
                         }
                     }
                 }
             }
         }
-        
-        //let valueRandom = clickRandomX + " " + clickRandomY + " " + this.boxSize
-        
-        //clickPiece(valueRandom)
     }
 
     eraseZero(n: number)
@@ -224,26 +197,105 @@ class Game
         document.getElementById("k" + erase + erase).style.backgroundImage = null
     }
 
-    swapPieces(cx: number, cy: number, n: number)
+    /*clickPiece(i)
     {
-        this.tempArray = this.tab[cy][cx]
+        let tabClick = i.split(" ")
+        this.cx = Number(tabClick[0])
+        this.cy = Number(tabClick[1])
+        this.t = Number(tabClick[2])
+        
+        if(this.cx == 0 && this.cy == 0)
+        {
+            if(tab[this.cy][this.cx + 1] == 0 || tab[this.cy + 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx > 0 && this.cx < this.t && this.cy == 0)
+        {
+            if(tab[this.cy][this.cx - 1] == 0 || tab[this.cy][this.cx + 1] == 0 || tab[this.cy + 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx == this.t && this.cy == 0)
+        {
+            if(tab[this.cy][this.cx - 1] == 0 || tab[this.cy + 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx == 0 && this.cy > 0 && this.cy < this.t)
+        {
+            if(tab[this.cy][this.cx + 1] == 0 || tab[this.cy - 1][this.cx] == 0 || tab[this.cy + 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx > 0 && this.cx < this.t && this.cy > 0 && this.cy < this.t)
+        {
+            if(tab[this.cy][this.cx - 1] == 0 || tab[this.cy][this.cx + 1] == 0 || tab[this.cy - 1][this.cx] == 0 || tab[this.cy + 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx == this.t && this.cy > 0 && this.cy < this.t)
+        {
+            if(tab[this.cy][this.cx - 1] == 0 || tab[this.cy - 1][this.cx] == 0 || tab[this.cy + 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx == 0 && this.cy == this.t)
+        {
+            if(tab[this.cy][this.cx + 1] == 0 || tab[this.cy - 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx > 0 && this.cx < this.t && this.cy == this.t)
+        {
+            if(tab[this.cy][this.cx - 1] == 0 || tab[this.cy][this.cx + 1] == 0 || tab[this.cy - 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+        if(this.cx == this.t && this.cy == this.t)
+        {
+            if(tab[this.cy][this.cx - 1] == 0 || tab[this.cy - 1][this.cx] == 0)
+            {
+                this.swapPieces(this.cx, this.cy, (this.t + 1))
+                //true
+            }
+        }
+    }*/
+
+    /*swapPieces(cx: number, cy: number, n: number)
+    {
+        this.tempArray = tab[cy][cx]
         this.temp = document.getElementById("k" + cx + cy).style.backgroundPosition
-        //alert("Done")
         for (let y = 1; y < (n + 1); y++)
         {
             for (let x = 1; x < (n + 1); x++)
             {
-                if(this.tab[y][x] == 0)
+                if(tab[y][x] == 0)
                 {
-                    this.tab[y][x] = this.tempArray
+                    tab[y][x] = this.tempArray
                     document.getElementById("k" + x + y).style.backgroundImage = "url('assets/" + this.text + "')"
                     document.getElementById("k" + x + y).style.backgroundPosition = this.temp
                 }
             }
         }
-        this.tab[cy][cx] = 0
-        document.getElementById("k" + cx + cy).style.backgroundImage = null
-        //alert("Done?")				
+        tab[cy][cx] = 0
+        document.getElementById("k" + cx + cy).style.backgroundImage = null			
         if(this.randomize == 0)
         {
             clearInterval(this.myTimer)
@@ -253,17 +305,15 @@ class Game
             document.getElementById("blokadaSzesc").style.zIndex = "-1"
             document.getElementById("blokadaLeft").style.zIndex = "-1"
             document.getElementById("blokadaRight").style.zIndex = "-1"
-            //document.getElementById("blokadaImg3").style.zIndex = "-1"
-            //document.getElementById("blokadaImg" + picture).style.zIndex = "5"
             setTimeout(() => {this.winning()}, 25)
         }
         if(this.randomize != 0)
         {
             this.randomize--
         }
-    }
+    }*/
 
-    winning()
+    /*winning()
     {
         if(this.victory == 1)
         {
@@ -276,11 +326,10 @@ class Game
             {
                 for (let x = 1; x < (this.boxSize + 1); x++)
                 {
-                    this.tab2[testing] = this.tab[y][x]
+                    this.tab2[testing] = globalVariables.tab[y][x]
                     testing++
                 }
             }
-            console.log(this.tab2)
             
             let checking = ((this.boxSize * this.boxSize) - 1)
             for (let i = 0; i < (this.boxSize * this.boxSize); i++)
@@ -291,30 +340,22 @@ class Game
                 }
                 else if(this.tab2[i] == checking && checking == 0)
                 {
-                    //this.win()
+                    this.win()
                 }
             }
-            
-            /*let checking = 1
-            for (let y = 1; y < (boxSize + 1); y++) {
-                for (let x = 1; x < (boxSize + 1); x++) {
-                    if(tab[y][x] == ((boxSize * boxSize) - checking))
-                    {
-                        if(x == boxSize && y == boxSize)
-                        {
-                            alert("Ułożyłeś!")
-                            document.getElementById("blokada").style.zIndex = "5"
-                        }
-                        else
-                        {
-                            checking++
-                        }
-                    }
-                }
-            }*/
         }
     }
     
+    win()
+    {
+        this.victory = 1
+        alert("SOLVED!")
+        document.getElementById("k" + this.boxSize + this.boxSize).style.backgroundImage = "url('assets/" + globalVariables.text + "')"
+        document.getElementById("k" + this.boxSize + this.boxSize).style.backgroundPosition = "-" + ((this.boxSize - 1) * (600 / this.boxSize)) + "px -" + ((this.boxSize - 1) * (600 / this.boxSize)) + "px"
+        document.getElementById("blokada").style.zIndex = "5"
+        this.bool = false
+    }*/
+
     changePhoto(d: string)
     {
         this.timing = 0
@@ -374,21 +415,21 @@ class Game
 
     pictureDoer()
     {
-        this.text = "Image" + this.picture + ".gif"
+        globalVariables.changeText("Image" + this.picture + ".gif")
         
-        if (this.bool == false)
+        if (globalVariables.bool == false)
         {
         
         }
-        if (this.bool == true)
+        if (globalVariables.bool == true)
         {
-            for (let y = 1; y < (this.boxSize + 1); y++)
+            for (let y = 1; y < (globalVariables.boxSize + 1); y++)
             {
-                for (let x = 1; x < (this.boxSize + 1); x++)
+                for (let x = 1; x < (globalVariables.boxSize + 1); x++)
                 {
-                    if(this.tab[y][x] != 0)
+                    if(globalVariables.tab[y][x] != 0)
                     {								
-                        document.getElementById("k" + x + y).style.backgroundImage = "url('assets/" + this.text + "')"
+                        document.getElementById("k" + x + y).style.backgroundImage = "url('assets/" + globalVariables.text + "')"
                     }
                 }
             }

@@ -36,8 +36,6 @@ var Game = /** @class */ (function () {
         this.deletingArrays();
         document.getElementById("plansza").innerHTML = null;
         document.getElementById("blokada").style.zIndex = "-1";
-        /*delete this.tab
-        delete this.tab2*/
         this.victory = 0;
         this.bool = true;
         this.boxSize = n;
@@ -48,17 +46,6 @@ var Game = /** @class */ (function () {
                 document.getElementById("k" + x + y).style.backgroundImage = "url('assets/" + this.text + "')";
             }
         }
-        /*for (let y = 0; y < n; y++)
-        {
-            for (let x = 0; x < n; x++)
-            {
-                 let top = y * (598 / n)
-                 let right = (x + 1) * (598 / n)
-                 let bot = (y + 1) * (598 / n)
-                 let left = x * (598 / n)
-                 document.getElementById("i" + x + y).style.clip = "rect(" + top + "px, " + right + "px, " + bot + "px, " + left + "px)"
-            }
-        }*/
         for (var y = 1; y < (n + 1); y++) {
             for (var x = 1; x < (n + 1); x++) {
                 var top_1 = (y - 1) * (600 / n);
@@ -66,7 +53,6 @@ var Game = /** @class */ (function () {
                 document.getElementById("k" + x + y).style.backgroundPosition = "-" + left + "px -" + top_1 + "px";
             }
         }
-        //this.tab = []
         for (var y = 0; y < (n + 2); y++) {
             this.tab[y] = [];
             for (var x = 0; x < (n + 2); x++) {
@@ -77,20 +63,19 @@ var Game = /** @class */ (function () {
         for (var y = 1; y < (n + 1); y++) {
             for (var x = 1; x < (n + 1); x++) {
                 this.tab[y][x] = this.liczba;
-                //console.log(this.tab[y][x])
                 this.liczba--;
             }
         }
         for (var y = 1; y < (n + 1); y++) {
+            var _loop_1 = function (x) {
+                var forClicking = document.getElementById("k" + x + y);
+                document.getElementById("k" + x + y).addEventListener("click", function (e) { return _this.clickPiece(forClicking.getAttribute('value')); });
+            };
             for (var x = 1; x < (n + 1); x++) {
-                document.getElementById("k" + x + y).setAttribute("onclick", "clickPiece(this.getAttribute('value'))");
+                _loop_1(x);
             }
         }
         this.eraseZero(n);
-        /*for (; randomize > 0;)
-        {
-            randomPieces()
-        }*/
         this.myTimer = setInterval(function () { _this.randomPieces(); }, 5);
     };
     Game.prototype.randomPieces = function () {
@@ -100,12 +85,7 @@ var Game = /** @class */ (function () {
         document.getElementById("blokadaSzesc").style.zIndex = "5";
         document.getElementById("blokadaLeft").style.zIndex = "5";
         document.getElementById("blokadaRight").style.zIndex = "5";
-        //document.getElementById("blokadaImg3").style.zIndex = "5"
         var direction = Math.floor((Math.random() * 10) % 4);
-        //console.log("Direction: " + direction)
-        /*let clickRandomX = Math.floor((Math.random() * 10) % (boxSize - 1))
-        let clickRandomY = Math.floor((Math.random() * 10) % (boxSize - 1))
-        console.log("Ta liczba to: " + clickRandomX + " i " + clickRandomY)*/
         while (this.lastDirection == direction) {
             direction = Math.floor((Math.random() * 10) % 4);
         }
@@ -116,10 +96,7 @@ var Game = /** @class */ (function () {
             }
             for (var x = 1; x < (this.boxSize + 1); x++) {
                 if (this.tab[y][x] == 0) {
-                    //randomTemp = "tab[" + y + "][" + x + "]"
-                    //console.log(x + "; " + y)
                     if (direction == 0) {
-                        //let swappingDirection = tab[cy][cx - 1]
                         if (this.tab[y - 1][x] > 0) {
                             this.lastDirection = 2;
                             this.wasHere = 1;
@@ -154,18 +131,75 @@ var Game = /** @class */ (function () {
                 }
             }
         }
-        //let valueRandom = clickRandomX + " " + clickRandomY + " " + this.boxSize
-        //clickPiece(valueRandom)
     };
     Game.prototype.eraseZero = function (n) {
         var erase = n;
         document.getElementById("k" + erase + erase).style.backgroundImage = null;
     };
+    Game.prototype.clickPiece = function (i) {
+        var tabClick = i.split(" ");
+        this.cx = Number(tabClick[0]);
+        this.cy = Number(tabClick[1]);
+        this.t = Number(tabClick[2]);
+        if (this.cx == 0 && this.cy == 0) {
+            if (this.tab[this.cy][this.cx + 1] == 0 || this.tab[this.cy + 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx > 0 && this.cx < this.t && this.cy == 0) {
+            if (this.tab[this.cy][this.cx - 1] == 0 || this.tab[this.cy][this.cx + 1] == 0 || this.tab[this.cy + 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx == this.t && this.cy == 0) {
+            if (this.tab[this.cy][this.cx - 1] == 0 || this.tab[this.cy + 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx == 0 && this.cy > 0 && this.cy < this.t) {
+            if (this.tab[this.cy][this.cx + 1] == 0 || this.tab[this.cy - 1][this.cx] == 0 || this.tab[this.cy + 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx > 0 && this.cx < this.t && this.cy > 0 && this.cy < this.t) {
+            if (this.tab[this.cy][this.cx - 1] == 0 || this.tab[this.cy][this.cx + 1] == 0 || this.tab[this.cy - 1][this.cx] == 0 || this.tab[this.cy + 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx == this.t && this.cy > 0 && this.cy < this.t) {
+            if (this.tab[this.cy][this.cx - 1] == 0 || this.tab[this.cy - 1][this.cx] == 0 || this.tab[this.cy + 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx == 0 && this.cy == this.t) {
+            if (this.tab[this.cy][this.cx + 1] == 0 || this.tab[this.cy - 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx > 0 && this.cx < this.t && this.cy == this.t) {
+            if (this.tab[this.cy][this.cx - 1] == 0 || this.tab[this.cy][this.cx + 1] == 0 || this.tab[this.cy - 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+        if (this.cx == this.t && this.cy == this.t) {
+            if (this.tab[this.cy][this.cx - 1] == 0 || this.tab[this.cy - 1][this.cx] == 0) {
+                this.swapPieces(this.cx, this.cy, (this.t + 1));
+                //true
+            }
+        }
+    };
     Game.prototype.swapPieces = function (cx, cy, n) {
         var _this = this;
         this.tempArray = this.tab[cy][cx];
         this.temp = document.getElementById("k" + cx + cy).style.backgroundPosition;
-        //alert("Done")
         for (var y = 1; y < (n + 1); y++) {
             for (var x = 1; x < (n + 1); x++) {
                 if (this.tab[y][x] == 0) {
@@ -177,7 +211,6 @@ var Game = /** @class */ (function () {
         }
         this.tab[cy][cx] = 0;
         document.getElementById("k" + cx + cy).style.backgroundImage = null;
-        //alert("Done?")				
         if (this.randomize == 0) {
             clearInterval(this.myTimer);
             document.getElementById("blokadaTrzy").style.zIndex = "-1";
@@ -186,8 +219,6 @@ var Game = /** @class */ (function () {
             document.getElementById("blokadaSzesc").style.zIndex = "-1";
             document.getElementById("blokadaLeft").style.zIndex = "-1";
             document.getElementById("blokadaRight").style.zIndex = "-1";
-            //document.getElementById("blokadaImg3").style.zIndex = "-1"
-            //document.getElementById("blokadaImg" + picture).style.zIndex = "5"
             setTimeout(function () { _this.winning(); }, 25);
         }
         if (this.randomize != 0) {
@@ -206,34 +237,24 @@ var Game = /** @class */ (function () {
                     testing++;
                 }
             }
-            console.log(this.tab2);
             var checking = ((this.boxSize * this.boxSize) - 1);
             for (var i = 0; i < (this.boxSize * this.boxSize); i++) {
                 if (this.tab2[i] == checking && checking != 0) {
                     checking--;
                 }
                 else if (this.tab2[i] == checking && checking == 0) {
-                    //this.win()
+                    this.win();
                 }
             }
-            /*let checking = 1
-            for (let y = 1; y < (boxSize + 1); y++) {
-                for (let x = 1; x < (boxSize + 1); x++) {
-                    if(tab[y][x] == ((boxSize * boxSize) - checking))
-                    {
-                        if(x == boxSize && y == boxSize)
-                        {
-                            alert("Ułożyłeś!")
-                            document.getElementById("blokada").style.zIndex = "5"
-                        }
-                        else
-                        {
-                            checking++
-                        }
-                    }
-                }
-            }*/
         }
+    };
+    Game.prototype.win = function () {
+        this.victory = 1;
+        alert("SOLVED!");
+        document.getElementById("k" + this.boxSize + this.boxSize).style.backgroundImage = "url('assets/" + this.text + "')";
+        document.getElementById("k" + this.boxSize + this.boxSize).style.backgroundPosition = "-" + ((this.boxSize - 1) * (600 / this.boxSize)) + "px -" + ((this.boxSize - 1) * (600 / this.boxSize)) + "px";
+        document.getElementById("blokada").style.zIndex = "5";
+        this.bool = false;
     };
     Game.prototype.changePhoto = function (d) {
         var _this = this;
