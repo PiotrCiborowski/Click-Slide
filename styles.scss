@@ -1,0 +1,183 @@
+$blokada-color: rgba(50, 50, 50, 0.5);
+$blokada-color-alternative: rgba(0, 0, 0, 0);
+
+html
+{
+    //background-image: url(/assets/Background.png);
+    background-color: moccasin;
+}
+
+@mixin size-buttons
+{
+    width: 50px;
+    height: 25px;
+}
+
+#main
+{
+    position: relative;
+    margin: 0 auto;
+    width: 750px;
+    height: 915px;
+    border: 1px solid black;
+    background-color: burlywood;
+    box-sizing: border-box;
+
+    #trzy
+    {
+        @include size-buttons;
+        margin-left: 246px;
+        margin-top: 4px;
+    }
+
+    #blokadaTrzy
+    {
+        @include size-buttons;
+        position: absolute;
+        left: 246px;
+        top: 4px;
+        background-color: $blokada-color;
+        z-index: -1;
+    }
+
+    #cztery
+    {
+        @include size-buttons;
+        margin-left: 10px;
+        margin-top: 4px;
+    }
+
+    #blokadaCztery
+    {
+        @include size-buttons;
+        position: absolute;
+        left: 310px;
+        top: 4px;
+        background-color: $blokada-color;
+        z-index: -1;
+    }
+
+    #piec
+    {
+        @include size-buttons;
+        margin-left: 12px;
+        margin-top: 4px;
+    }
+
+    #blokadaPiec
+    {
+        @include size-buttons;
+        position: absolute;
+        left: 376px;
+        top: 4px;
+        background-color: $blokada-color;
+        z-index: -1;
+    }
+
+    #szesc
+    {
+        @include size-buttons;
+        margin-left: 10px;
+        margin-top: 4px;
+    }
+
+    #blokadaSzesc
+    {
+        @include size-buttons;
+        position: absolute;
+        left: 440px;
+        top: 4px;
+        background-color: $blokada-color;
+        z-index: -1;
+    }
+
+    #plansza
+    {
+        width: 602px;
+        height: 602px;
+        margin: 0 auto;
+        margin: 157px 74px 0 74px;
+        border: 1px solid black;
+        background-color: floralwhite;
+        box-sizing: border-box;
+        z-index: 2;
+    }
+
+    #blokada
+    {
+        position: absolute;
+        background-color: $blokada-color;
+        width: 602px;
+        height: 602px;
+        left: 74px;
+        top: 186px;
+        z-index: -1;
+    }
+
+    #blokadaLeft
+    {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        left: 230px;
+        top: 71px;
+        background-color: $blokada-color-alternative;
+        z-index: -1;
+    }
+
+    #blokadaRight
+    {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        left: 442px;
+        top: 71px;
+        background-color: $blokada-color-alternative;
+        z-index: -1;
+    }
+}
+
+#imgShower
+{
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    border: 1px solid black;
+    left: 303px;
+    top: 39px;
+    overflow: hidden;
+}
+
+.imgHolder
+{
+    width: 1664px;
+    height: 128px;
+
+    img:first-of-type
+    {
+        margin-left: 0px;
+    }
+
+    img
+    {
+        margin-left: -4px;
+    }
+}
+
+.klocek
+{
+    display: block;
+    float: left;
+    overflow: hidden;
+    border: 1px solid black;
+    box-sizing: border-box;
+    z-index: 3;
+}
+
+.klocek_i
+{
+    position: absolute;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: 3;
+}

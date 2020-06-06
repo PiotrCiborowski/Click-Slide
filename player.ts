@@ -6,6 +6,9 @@ export function clickPiece(i)
     this.cx = Number(tabClick[0])
     this.cy = Number(tabClick[1])
     this.t = Number(tabClick[2])
+
+    console.log("cx: " + this.cx + " cy: " + this.cy + " t: " + this.t)
+    console.log("cx > 0 & cy > 0 & tab: " + globalVariables.tab[this.cy][this.cx - 1])
     
     if(this.cx == 0 && this.cy == 0)
     {

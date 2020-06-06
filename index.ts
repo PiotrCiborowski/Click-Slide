@@ -1,5 +1,6 @@
 import { clickPiece } from './player'
 import * as globalVariables from './globalVariables'
+import './styles.scss'
 
 export default class Game
 {
